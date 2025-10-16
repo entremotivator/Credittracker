@@ -12,21 +12,76 @@ st.set_page_config(page_title="Credit & Trade Line Manager Pro", layout="wide", 
 # Custom CSS
 st.markdown("""
 <style>
+    /* Metric cards with black background and white text */
     .stMetric {
-        background-color: #f0f2f6;
+        background-color: #1a1a1a;
+        color: #ffffff;
         padding: 15px;
         border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
+    
+    .stMetric label {
+        color: #cccccc !important;
+    }
+    
+    .stMetric [data-testid="stMetricValue"] {
+        color: #ffffff !important;
+    }
+    
+    .stMetric [data-testid="stMetricDelta"] {
+        color: #ffffff !important;
+    }
+    
+    /* Expander cards with black background */
+    div[data-testid="stExpander"] {
+        background-color: #1a1a1a;
+        color: #ffffff;
+        border-radius: 10px;
+        border: 1px solid #333333;
+        margin-bottom: 10px;
+    }
+    
+    div[data-testid="stExpander"] summary {
+        color: #ffffff !important;
+    }
+    
+    div[data-testid="stExpander"] p, 
+    div[data-testid="stExpander"] span,
+    div[data-testid="stExpander"] div {
+        color: #ffffff !important;
+    }
+    
+    /* All text inside expanders */
+    .stExpander {
+        color: #ffffff;
+    }
+    
     .big-font {
         font-size: 24px !important;
         font-weight: bold;
+        color: #ffffff !important;
     }
-    div[data-testid="stExpander"] {
-        background-color: #ffffff;
-        border-radius: 10px;
-        border: 1px solid #e0e0e0;
-        margin-bottom: 10px;
+    
+    /* Form elements inside expanders */
+    div[data-testid="stExpander"] input,
+    div[data-testid="stExpander"] select,
+    div[data-testid="stExpander"] textarea {
+        background-color: #2a2a2a;
+        color: #ffffff;
+        border: 1px solid #444444;
+    }
+    
+    /* Markdown inside expanders */
+    div[data-testid="stExpander"] .stMarkdown {
+        color: #ffffff !important;
+    }
+    
+    div[data-testid="stExpander"] h1,
+    div[data-testid="stExpander"] h2,
+    div[data-testid="stExpander"] h3,
+    div[data-testid="stExpander"] h4 {
+        color: #ffffff !important;
     }
 </style>
 """, unsafe_allow_html=True)
