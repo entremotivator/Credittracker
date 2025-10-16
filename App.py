@@ -406,45 +406,50 @@ with tab_viz3:
     st.dataframe(display_df, use_container_width=True, hide_index=True)
 
 with tab_viz4:
-    col1, col2 = st.columns(2)
+    # Check if there are any rewards accounts
+    rewards_df = st.session_state.accounts[st.session_state.accounts['Rewards Points'] > 0].copy()
     
-    with col1:
-        # Rewards points by account
-        rewards_df = st.session_state.accounts[st.session_state.accounts['Rewards Points'] > 0].copy()
-        rewards_df = rewards_df.sort_values('Rewards Points', ascending=False)
+    if len(rewards_df) > 0:
+        col1, col2 = st.columns(2)
         
-        fig_rewards = px.bar(rewards_df,
-                            x='Account Name',
-                            y='Rewards Points',
-                            title='Rewards Points by Account',
-                            color='Points Dollar Value',
-                            color_continuous_scale='Blues')
-        fig_rewards.update_xaxis(tickangle=-45)
-        st.plotly_chart(fig_rewards, use_container_width=True)
-    
-    with col2:
-        # Points value comparison
-        fig_value = px.bar(rewards_df,
-                          x='Account Name',
-                          y='Points Dollar Value',
-                          title='Estimated Cash Value of Points',
-                          color='Points Value',
-                          color_continuous_scale='Greens')
-        fig_value.update_xaxis(tickangle=-45)
-        st.plotly_chart(fig_value, use_container_width=True)
-    
-    # Rewards summary
-    st.subheader("Rewards Summary")
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.metric("Highest Point Balance", f"{rewards_df['Rewards Points'].max():,.0f}", 
-                 rewards_df.loc[rewards_df['Rewards Points'].idxmax(), 'Account Name'])
-    with col2:
-        st.metric("Most Valuable Points", f"${rewards_df['Points Dollar Value'].max():,.2f}",
-                 rewards_df.loc[rewards_df['Points Dollar Value'].idxmax(), 'Account Name'])
-    with col3:
-        avg_point_value = rewards_df['Points Value'].mean()
-        st.metric("Avg Point Value", f"{avg_point_value:.3f}¢")
+        with col1:
+            # Rewards points by account
+            rewards_df = rewards_df.sort_values('Rewards Points', ascending=False)
+            
+            fig_rewards = px.bar(rewards_df,
+                                x='Account Name',
+                                y='Rewards Points',
+                                title='Rewards Points by Account',
+                                color='Points Dollar Value',
+                                color_continuous_scale='Blues')
+            fig_rewards.update_xaxis(tickangle=-45)
+            st.plotly_chart(fig_rewards, use_container_width=True)
+        
+        with col2:
+            # Points value comparison
+            fig_value = px.bar(rewards_df,
+                              x='Account Name',
+                              y='Points Dollar Value',
+                              title='Estimated Cash Value of Points',
+                              color='Points Value',
+                              color_continuous_scale='Greens')
+            fig_value.update_xaxis(tickangle=-45)
+            st.plotly_chart(fig_value, use_container_width=True)
+        
+        # Rewards summary
+        st.subheader("Rewards Summary")
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Highest Point Balance", f"{rewards_df['Rewards Points'].max():,.0f}", 
+                     rewards_df.loc[rewards_df['Rewards Points'].idxmax(), 'Account Name'])
+        with col2:
+            st.metric("Most Valuable Points", f"${rewards_df['Points Dollar Value'].max():,.2f}",
+                     rewards_df.loc[rewards_df['Points Dollar Value'].idxmax(), 'Account Name'])
+        with col3:
+            avg_point_value = rewards_df['Points Value'].mean()
+            st.metric("Avg Point Value", f"{avg_point_value:.3f}¢")
+    else:
+        st.info("No accounts with rewards points found. Add accounts with rewards points to see analytics here.")
 
 st.divider()
 
