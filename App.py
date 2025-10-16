@@ -414,37 +414,39 @@ with tab_viz4:
         
         with col1:
             # Rewards points by account
-            rewards_df = rewards_df.sort_values('Rewards Points', ascending=False)
+            rewards_df_sorted = rewards_df.sort_values('Rewards Points', ascending=False)
             
-            fig_rewards = px.bar(rewards_df,
+            fig_rewards = px.bar(rewards_df_sorted,
                                 x='Account Name',
                                 y='Rewards Points',
                                 title='Rewards Points by Account',
                                 color='Points Dollar Value',
                                 color_continuous_scale='Blues')
-            fig_rewards.update_xaxis(tickangle=-45)
+            fig_rewards.update_layout(xaxis_tickangle=-45)
             st.plotly_chart(fig_rewards, use_container_width=True)
         
         with col2:
             # Points value comparison
-            fig_value = px.bar(rewards_df,
+            fig_value = px.bar(rewards_df_sorted,
                               x='Account Name',
                               y='Points Dollar Value',
                               title='Estimated Cash Value of Points',
                               color='Points Value',
                               color_continuous_scale='Greens')
-            fig_value.update_xaxis(tickangle=-45)
+            fig_value.update_layout(xaxis_tickangle=-45)
             st.plotly_chart(fig_value, use_container_width=True)
         
         # Rewards summary
         st.subheader("Rewards Summary")
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.metric("Highest Point Balance", f"{rewards_df['Rewards Points'].max():,.0f}", 
-                     rewards_df.loc[rewards_df['Rewards Points'].idxmax(), 'Account Name'])
+            max_points = rewards_df['Rewards Points'].max()
+            max_points_account = rewards_df.loc[rewards_df['Rewards Points'].idxmax(), 'Account Name']
+            st.metric("Highest Point Balance", f"{max_points:,.0f}", max_points_account)
         with col2:
-            st.metric("Most Valuable Points", f"${rewards_df['Points Dollar Value'].max():,.2f}",
-                     rewards_df.loc[rewards_df['Points Dollar Value'].idxmax(), 'Account Name'])
+            max_value = rewards_df['Points Dollar Value'].max()
+            max_value_account = rewards_df.loc[rewards_df['Points Dollar Value'].idxmax(), 'Account Name']
+            st.metric("Most Valuable Points", f"${max_value:,.2f}", max_value_account)
         with col3:
             avg_point_value = rewards_df['Points Value'].mean()
             st.metric("Avg Point Value", f"{avg_point_value:.3f}¢")
